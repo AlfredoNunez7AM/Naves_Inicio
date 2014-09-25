@@ -6,10 +6,24 @@
 
 CGame::CGame(){
 	estado = ESTADO_INICIANDO; //ACT2:Mal, Aqui debes de iniciar tu estado, revisa el diagrama para saber cual es el estado inicial
+atexit(SDL_Quit);
 }
 
+void CGame::Iniciando()
+{
+	if (SDL_Init( SDL_INIT_VIDEO )){
+		printf("Error %s ", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	screen = SDL_SetVideoMode( 640, 480, 24, SDL_SWSURFACE );	if (screen == NULL){
+		printf("Error %s ", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+SDL_WM_SetCaption( "Mi primer Juego", NULL );
+}
 // Con esta función eliminaremos todos los elementos en pantalla
 void CGame::Finalize(){
+	SDL_Quit();
 }
 
 bool CGame::Start()
@@ -22,9 +36,9 @@ bool CGame::Start()
 		//Maquina de estados
 		switch(estado){///ACT2: Mal,, te faltaron 2 estados mas.
 			case Estado::ESTADO_INICIANDO:
-				//Iniciando();
+				Iniciando();
 				{
-				nave =IMG_LoadJPG_RW(SDL_RWFromFile("../Download/cuadro.jpg","rb"));
+				nave =IMG_LoadJPG_RW(SDL_RWFromFile("../Data/cuadro.jpg","rb"));
 				SDL_Rect fuente;
 				fuente.x = 90;
 				fuente.y = 152;
@@ -49,6 +63,8 @@ bool CGame::Start()
 				salirJuego = true;
 			break;
 		};
+		//Este codigo estara provicionalmente aqui.
+       SDL_Flip(screen);
     }
 	return true;
 }
