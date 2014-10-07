@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Game.h"
+#include "Config.h"
 #include <SDL.h>
 #include <SDL_image.h>
 
 CGame::CGame(){
 	estado = ESTADO_INICIANDO; //ACT2:Mal, Aqui debes de iniciar tu estado, revisa el diagrama para saber cual es el estado inicial
-atexit(SDL_Quit);
+atexit(SDL_Quit);
+
 }
 
 void CGame::Iniciando()
@@ -15,14 +17,23 @@ void CGame::Iniciando()
 		printf("Error %s ", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
-	screen = SDL_SetVideoMode( 640, 480, 24, SDL_SWSURFACE );	if (screen == NULL){
+	screen = SDL_SetVideoMode( WIDTH_SCREEN, HEIGHT_SCREEN, 24, SDL_SWSURFACE );
+	if (screen == NULL){
 		printf("Error %s ", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
 SDL_WM_SetCaption( "Mi primer Juego", NULL );
+atexit(SDL_Quit);
+nave = new Sprite(screen);
+nave->cargarimagen("../Data/MiNave.bmp");
+
+
+
 }
 // Con esta función eliminaremos todos los elementos en pantalla
 void CGame::Finalize(){
+	delete(nave);
+	SDL_FreeSurface(screen);
 	SDL_Quit();
 }
 
@@ -37,7 +48,7 @@ bool CGame::Start()
 		switch(estado){///ACT2: Mal,, te faltaron 2 estados mas.
 			case Estado::ESTADO_INICIANDO:
 				Iniciando();
-				{
+				/*{
 				nave =IMG_LoadJPG_RW(SDL_RWFromFile("../Data/cuadro.jpg","rb"));
 				SDL_Rect fuente;
 				fuente.x = 90;
@@ -50,10 +61,11 @@ bool CGame::Start()
 				destino.w = 100;
 				destino.h =  fuente.h;
 				SDL_BlitSurface(nave, &fuente, screen, &destino);
-				}
+				}*/
 				estado = Estado::ESTADO_MENU;
 			break;
 			case Estado::ESTADO_MENU:
+				nave->PintarModulo(0,0,0,64,64);
 				break;
 			case Estado::ESTADO_JUGANDO:
 			break;
@@ -64,7 +76,8 @@ bool CGame::Start()
 			break;
 		};
 		//Este codigo estara provicionalmente aqui.
-       SDL_Flip(screen);
+       SDL_Flip(screen);
+
     }
 	return true;
 }
