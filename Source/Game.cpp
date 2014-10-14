@@ -27,9 +27,6 @@ atexit(SDL_Quit);
 nave = new Nave(screen,"../Data/MiNave.bmp");
 //nave = new Sprite(screen);
 //nave->cargarimagen("../Data/MiNave.bmp");
-
-
-
 }
 // Con esta función eliminaremos todos los elementos en pantalla
 void CGame::Finalize(){
@@ -69,19 +66,24 @@ bool CGame::Start()
 				/*nave->PintarModulo(0,0,0,64,64);*/
 				//nave->PintarModulo(0,100,100);
 				keys =SDL_GetKeyState(NULL);
+				if(keys[SDLK_UP])
+				{
+					nave->MoverArribaAbajo(-1);
+				}
 				if(keys[SDLK_DOWN])
 				{
-					nave->Pintar();
-					/*nave->Pintar(0,100,100);
-					nave->Pintar(0,100,165);
-					nave->Pintar(0,100,230);
-					nave->Pintar(0,100,295);
-					nave->Pintar(0,100,360);
-					nave->Pintar(0,165,133);
-					nave->Pintar(0,165,198);
-					nave->Pintar(0,165,263);
-					nave->Pintar(0,165,328);*/
+					nave->MoverArribaAbajo(1);
 				}
+
+				if(keys[SDLK_LEFT])
+				{
+					nave->MoverLados(-1);
+				}
+				if(keys[SDLK_RIGHT])
+				{
+					nave->MoverLados(1);
+				}
+				nave->Pintar();
 				break;
 			case Estado::ESTADO_JUGANDO:
 			break;

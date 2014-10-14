@@ -7,8 +7,9 @@ class Nave{
 	int x;
 	int y;
 public:
-	void Mover(int posicion);
+	void MoverArribaAbajo(int posicion);
 	Nave(SDL_Surface * screen, char * rutaImagen);//Constructor
 	void Pintar();
+	void MoverLados(int posicion);
 };
 #endif

@@ -36,10 +36,10 @@ void Sprite::cargarimagen(char*nombre){
 
 }
 
-	int Sprite::WidthImage(){
-		return imagen->w;
+	int Sprite::WidthModule(int module){
+		return spriteDef.modulos[module].w;
 	}
 
-	int Sprite::HeightImage(){
-		return imagen->h;
+	int Sprite::HeightModule(int module){
+		return spriteDef.modulos[module].h;
 	}

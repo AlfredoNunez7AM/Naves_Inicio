@@ -13,8 +13,8 @@ public:
 	void cargarimagen (char * nombre);
 	/*void PintarModulo(int nombre, int x, int y, int w, int h);*/
 	void PintarModulo(int nombre, int x, int y);
-	int WidthImage();
-	int HeightImage();
+	int WidthModule(int module);
+	int HeightModule(int module);
 };
 
 
