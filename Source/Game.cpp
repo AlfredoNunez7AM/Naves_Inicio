@@ -24,8 +24,9 @@ void CGame::Iniciando()
 	}
 SDL_WM_SetCaption( "Mi primer Juego", NULL );
 atexit(SDL_Quit);
-nave = new Sprite(screen);
-nave->cargarimagen("../Data/MiNave.bmp");
+nave = new Nave(screen,"../Data/MiNave.bmp");
+//nave = new Sprite(screen);
+//nave->cargarimagen("../Data/MiNave.bmp");
 
 
 
@@ -43,7 +44,6 @@ bool CGame::Start()
 	int salirJuego = false;
           
 	while (salirJuego == false){
-            
 		//Maquina de estados
 		switch(estado){///ACT2: Mal,, te faltaron 2 estados mas.
 			case Estado::ESTADO_INICIANDO:
@@ -65,7 +65,23 @@ bool CGame::Start()
 				estado = Estado::ESTADO_MENU;
 			break;
 			case Estado::ESTADO_MENU:
-				nave->PintarModulo(0,0,0,64,64);
+				SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
+				/*nave->PintarModulo(0,0,0,64,64);*/
+				//nave->PintarModulo(0,100,100);
+				keys =SDL_GetKeyState(NULL);
+				if(keys[SDLK_DOWN])
+				{
+					nave->Pintar();
+					/*nave->Pintar(0,100,100);
+					nave->Pintar(0,100,165);
+					nave->Pintar(0,100,230);
+					nave->Pintar(0,100,295);
+					nave->Pintar(0,100,360);
+					nave->Pintar(0,165,133);
+					nave->Pintar(0,165,198);
+					nave->Pintar(0,165,263);
+					nave->Pintar(0,165,328);*/
+				}
 				break;
 			case Estado::ESTADO_JUGANDO:
 			break;
@@ -75,6 +91,12 @@ bool CGame::Start()
 				salirJuego = true;
 			break;
 		};
+
+		while(SDL_PollEvent(&event))//Aqui sdl creara una lista de eventos ocurridos
+		{
+			if(event.type == SDL_QUIT) {salirJuego = true;} //si se detecta una salida del sdl o.....
+			if(event.type == SDL_KEYDOWN) { }
+		}
 		//Este codigo estara provicionalmente aqui.
        SDL_Flip(screen);
 

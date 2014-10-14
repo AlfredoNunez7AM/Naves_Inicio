@@ -1,6 +1,6 @@
 
 #include <SDL_image.h>
-#include "Sprite.h"
+#include "Nave.h"
 
 class CGame
 {
@@ -22,8 +22,12 @@ public:
 
 private:
 	void Iniciando();
+	unsigned int x;
+	Uint8 *keys;//Esta variable nos servira para ver si determinadas teclas estan o no pulsadas
+	SDL_Event event;//La variable event de tipo evento de SDL nos servira para motorizar
+
 	SDL_Surface *screen;
-	Sprite *nave;
+	Nave *nave;
 	Estado estado;
 
 };
