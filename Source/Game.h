@@ -16,7 +16,8 @@ public:
 		ESTADO_MENU,
 		ESTADO_JUGANDO,
 		ESTADO_TERMINANDO,
-		ESTADO_FINALIZANDO
+		ESTADO_FINALIZANDO,
+		ESTADO_ESPERANDO
 	};
 
 
@@ -28,6 +29,8 @@ private:
 
 	SDL_Surface *screen;
 	Nave *nave;
+	Nave *enemigo;
 	Estado estado;
+	Estado condicion;
 
 };
