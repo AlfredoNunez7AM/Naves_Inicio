@@ -5,8 +5,8 @@ Nave::Nave(SDL_Surface * screen, char * rutaImagen, int x, int y)
 {
 	sprite = new Sprite(screen);
 	sprite->cargarimagen(rutaImagen);
-	//x = (WIDTH_SCREEN/2)-(sprite->WidthModule(0)/2);//Ancho
-	//y = (HEIGHT_SCREEN-80)-(sprite->HeightModule(0));//Alto
+	w = sprite->WidthModule(0);
+	h = sprite->HeightModule(0);
 	this->x = x;
 	this->y = y;
 	automovimiento = false;
@@ -38,4 +38,24 @@ void Nave::MoverLados(int posicion){
 void Nave::MoverArribaAbajo(int posicion)
 {
 	x += posicion;
+}
+
+
+int Nave::ObtenerX(){
+	return x;
+}
+
+int Nave::ObtenerY(){
+	return y;
+
+}
+
+int Nave::ObtenerW()
+{
+	return w;
+}
+
+int Nave::ObtenerH()
+{
+	return h;
 }

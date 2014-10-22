@@ -108,8 +108,7 @@ bool CGame::Start()
 				
 				break;
 			case Estado::ESTADO_JUGANDO:
-				
-enemigo->Actualizar();
+				enemigo->Actualizar();
 				SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
 				/*nave->PintarModulo(0,0,0,64,64);
 				nave->PintarModulo(0,100,100);*/
@@ -125,10 +124,12 @@ enemigo->Actualizar();
 
 				if(keys[SDLK_LEFT])
 				{
+					//if (!LimitePantalla(nave))
 					nave->MoverLados(-1);
 				}
 				if(keys[SDLK_RIGHT])
 				{
+					if (!LimitePantalla(nave))
 					nave->MoverLados(1);
 				}
 				if(keys[SDLK_F10])
@@ -166,4 +167,20 @@ enemigo->Actualizar();
 
     }
 	return true;
+}
+
+bool CGame::LimitePantalla(Nave*objeto, int bandera)
+{
+	if(objeto->ObtenerX() <= 0)
+		return true;
+
+	if (objeto->ObtenerY() <=0)
+		return true;
+
+	if (objeto->ObtenerX() >=WIDTH_SCREEN - objeto->ObtenerW())
+		return true;
+
+	if (objeto->ObtenerY() >=HEIGHT_SCREEN - objeto->ObtenerH())
+		return true;
+	return false;
 }

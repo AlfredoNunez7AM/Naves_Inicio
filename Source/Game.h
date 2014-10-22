@@ -1,6 +1,8 @@
-
+#pragma once
 #include <SDL_image.h>
 #include "Nave.h"
+
+
 
 class CGame
 {
@@ -23,6 +25,7 @@ public:
 
 private:
 	void Iniciando();
+	bool LimitePantalla(Nave * objeto, int bandera);
 	unsigned int x;
 	Uint8 *keys;//Esta variable nos servira para ver si determinadas teclas estan o no pulsadas
 	SDL_Event event;//La variable event de tipo evento de SDL nos servira para motorizar

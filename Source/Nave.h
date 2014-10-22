@@ -6,6 +6,8 @@ class Nave{
 	Sprite * sprite;
 	int x;
 	int y;
+	int w;
+	int h;
 	bool automovimiento;
 public:
 	void MoverArribaAbajo(int posicion);
@@ -14,5 +16,9 @@ public:
 	void Pintar();
 	void MoverLados(int posicion);
 	void Actualizar();
+	int ObtenerY();
+	int ObtenerX();
+	int ObtenerW();
+	int ObtenerH();
 };
 #endif
