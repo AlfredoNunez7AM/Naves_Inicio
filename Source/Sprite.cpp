@@ -30,8 +30,8 @@ void Sprite::cargarimagen(char*nombre){
 	src.w = spriteDef.modulos[nombre].w;
 	src.h = spriteDef.modulos[nombre].h;
 	SDL_Rect dest;
-	dest.y = x;
-	dest.x = y;
+	dest.y = y;
+	dest.x = x;
 	SDL_BlitSurface(imagen, &src, screen, &dest);
 
 }

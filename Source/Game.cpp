@@ -18,7 +18,7 @@ void CGame::Iniciando()
 		printf("Error %s ", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
-	screen = SDL_SetVideoMode( WIDTH_SCREEN, HEIGHT_SCREEN, 24, SDL_SWSURFACE );
+	screen = SDL_SetVideoMode( WIDTH_SCREEN, HEIGHT_SCREEN, 24, SDL_HWSURFACE );
 	if (screen == NULL){
 		printf("Error %s ", SDL_GetError());
 		exit(EXIT_FAILURE);
@@ -28,8 +28,15 @@ atexit(SDL_Quit);
 //x = (WIDTH_SCREEN/2)-(sprite->WidthModule(0)/2);//Ancho
 //	y = (HEIGHT_SCREEN-80)-(sprite->HeightModule(0));//Alto
 nave = new Nave(screen,"../Data/MiNave.bmp",(WIDTH_SCREEN/2)/*-(sprite->WidthModule(0)/2)*/, (HEIGHT_SCREEN-80)/*-(sprite->HeightModule(0))*/);
-enemigo = new Nave (screen, "../Data/enemigo.bmp",0,0);
-enemigo->SetAutoMovimiento(true);
+enemigo = new Nave(screen, "../Data/enemigo.bmp", 0,0);
+for (int i = 0; i < 5; i++)
+{
+	enemigoArreglo[i] = new Nave(screen, "../Data/enemigo.bmp",i*50,0);
+	enemigoArreglo[i]->SetAutoMovimiento(false);
+	enemigoArreglo[i]->SetPasoLimite(4);
+}
+enemigo->SetAutoMovimiento(false);
+enemigo->SetPasoLimite(4);
 //nave = new Sprite(screen);
 //nave->cargarimagen("../Data/MiNave.bmp");
 }
@@ -108,28 +115,35 @@ bool CGame::Start()
 				
 				break;
 			case Estado::ESTADO_JUGANDO:
+				for (int i = 0; i < 5; i++)
+				{
+					enemigoArreglo[i]->Actualizar();
+				}
 				enemigo->Actualizar();
+				MoverEnemigo();
 				SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
 				/*nave->PintarModulo(0,0,0,64,64);
 				nave->PintarModulo(0,100,100);*/
 				keys =SDL_GetKeyState(NULL);
 				if(keys[SDLK_UP])
 				{
+					if (!LimitePantalla(nave, BORDE_SUPERIOR))
 					nave->MoverArribaAbajo(-1);
 				}
 				if(keys[SDLK_DOWN])
 				{
+					if (!LimitePantalla(nave, BORDE_INFERIOR))
 					nave->MoverArribaAbajo(1);
 				}
 
 				if(keys[SDLK_LEFT])
 				{
-					//if (!LimitePantalla(nave))
+					if (!LimitePantalla(nave, BORDE_IZQUIERDO))
 					nave->MoverLados(-1);
 				}
 				if(keys[SDLK_RIGHT])
 				{
-					if (!LimitePantalla(nave))
+					if (!LimitePantalla(nave, BORDE_DERECHO))
 					nave->MoverLados(1);
 				}
 				if(keys[SDLK_F10])
@@ -139,6 +153,10 @@ bool CGame::Start()
 				}
 				nave->Pintar();
 				enemigo->Pintar();
+				for (int i = 0; i < 5; i++)
+				{
+					enemigoArreglo[i]->Pintar();
+				}
 				
 			break;
 			case Estado::ESTADO_FINALIZANDO:
@@ -171,16 +189,92 @@ bool CGame::Start()
 
 bool CGame::LimitePantalla(Nave*objeto, int bandera)
 {
+	if(bandera & BORDE_IZQUIERDO)
 	if(objeto->ObtenerX() <= 0)
 		return true;
-
+	if (bandera & BORDE_SUPERIOR)
 	if (objeto->ObtenerY() <=0)
 		return true;
 
-	if (objeto->ObtenerX() >=WIDTH_SCREEN - objeto->ObtenerW())
+	if (bandera & BORDE_DERECHO)
+	if (objeto->ObtenerX() >=(WIDTH_SCREEN - objeto->ObtenerW()))
 		return true;
-
+	if (bandera & BORDE_INFERIOR)
 	if (objeto->ObtenerY() >=HEIGHT_SCREEN - objeto->ObtenerH())
 		return true;
 	return false;
-}
+
+}//Termina LimitePantalla
+
+void CGame::MoverEnemigo(){
+
+	if(enemigo->ObtenerPasoActual()==0)
+	if (!LimitePantalla(enemigo, BORDE_DERECHO))
+	enemigo->MoverLados(1);//Derecha
+	else{
+		enemigo->IncrementarPasoActual();
+	}//fin else derecho
+
+	if (enemigo->ObtenerPasoActual()==1)
+		if(!LimitePantalla(enemigo, BORDE_INFERIOR))
+			enemigo->MoverArribaAbajo(1);//Abajo
+		else{
+		enemigo->IncrementarPasoActual();
+	}//Fn else inferior
+
+	if(enemigo->ObtenerPasoActual()==2)
+		if (!LimitePantalla(enemigo, BORDE_IZQUIERDO))
+			enemigo->MoverLados(-1);//Izquierda
+	else{
+				enemigo->IncrementarPasoActual();
+			}//fin else izquierda
+
+		if (enemigo->ObtenerPasoActual()==3)
+			if (!LimitePantalla(enemigo, BORDE_SUPERIOR))
+				enemigo->MoverArribaAbajo(-1);//Arriba
+			else{
+				enemigo->IncrementarPasoActual();
+			}//fin else arriba
+
+	//if(enemigo->ObtenerPasoActual()==3)
+	//	if (!LimitePantalla(enemigo, BORDE_INFERIOR))
+	//		enemigo->MoverArribaAbajo(1);//Abajo
+
+			for (int i = 0; i < 5; i++)
+			{
+				if(enemigoArreglo[i]->ObtenerPasoActual()==0)
+	if (!LimitePantalla(enemigoArreglo[i], BORDE_DERECHO))
+	enemigoArreglo[i]->MoverLados(1);//Derecha
+	else{
+		enemigoArreglo[i]->IncrementarPasoActual();
+	}//fin else derecho
+
+	if (enemigoArreglo[i]->ObtenerPasoActual()==1)
+		if(!LimitePantalla(enemigoArreglo[i], BORDE_INFERIOR))
+			enemigoArreglo[i]->MoverArribaAbajo(1);//Abajo
+		else{
+		enemigoArreglo[i]->IncrementarPasoActual();
+	}//Fn else inferior
+
+	if(enemigoArreglo[i]->ObtenerPasoActual()==2)
+		if (!LimitePantalla(enemigoArreglo[i], BORDE_IZQUIERDO))
+			enemigoArreglo[i]->MoverLados(-1);//Izquierda
+	else{
+				enemigoArreglo[i]->IncrementarPasoActual();
+			}//fin else izquierda
+
+		if (enemigoArreglo[i]->ObtenerPasoActual()==3)
+			if (!LimitePantalla(enemigoArreglo[i], BORDE_SUPERIOR))
+				enemigoArreglo[i]->MoverArribaAbajo(-1);//Arriba
+			else{
+				enemigoArreglo[i]->IncrementarPasoActual();
+			}//fin else arriba
+
+	//if(enemigo->ObtenerPasoActual()==3)
+	//	if (!LimitePantalla(enemigo, BORDE_INFERIOR))
+	//		enemigo->MoverArribaAbajo(1);//Abajo
+			}
+			
+
+}//Termina MoverEnemigo
+

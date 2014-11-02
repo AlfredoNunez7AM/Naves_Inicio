@@ -9,10 +9,17 @@ class Nave{
 	int w;
 	int h;
 	bool automovimiento;
+	int pasos;
+	int pasoActual;
+	int pasoLimite;
 public:
 	void MoverArribaAbajo(int posicion);
 	Nave(SDL_Surface * screen, char * rutaImagen, int x, int y);//Constructor
 	void SetAutoMovimiento(bool automovimiento);
+	void SetPasoLimite(int pasos);
+	int ObtenerPasoActual();
+	void IncrementarPasoActual();
+	bool EstaColicionando(Nave * b);
 	void Pintar();
 	void MoverLados(int posicion);
 	void Actualizar();

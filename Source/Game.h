@@ -25,6 +25,7 @@ public:
 
 private:
 	void Iniciando();
+	void MoverEnemigo();
 	bool LimitePantalla(Nave * objeto, int bandera);
 	unsigned int x;
 	Uint8 *keys;//Esta variable nos servira para ver si determinadas teclas estan o no pulsadas
@@ -33,6 +34,7 @@ private:
 	SDL_Surface *screen;
 	Nave *nave;
 	Nave *enemigo;
+	Nave *enemigoArreglo[5];
 	Estado estado;
 	Estado condicion;
 
