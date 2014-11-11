@@ -32,7 +32,7 @@ void Sprite::cargarimagen(char*nombre){
 	SDL_Rect dest;
 	dest.y = y;
 	dest.x = x;
-	SDL_BlitSurface(imagen, &src, screen, &dest);
+	SDL_BlitSurface(imagen, &src, screen, &dest);// Estudiar
 
 }
 

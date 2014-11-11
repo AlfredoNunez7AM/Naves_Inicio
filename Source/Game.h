@@ -30,12 +30,13 @@ private:
 	unsigned int x;
 	Uint8 *keys;//Esta variable nos servira para ver si determinadas teclas estan o no pulsadas
 	SDL_Event event;//La variable event de tipo evento de SDL nos servira para motorizar
-
 	SDL_Surface *screen;
 	Nave *nave;
-	Nave *enemigo;
 	Nave *enemigoArreglo[5];
 	Estado estado;
 	Estado condicion;
+	int tick;
+	int tiempoFrameInicial;
+	int tiempoFrameFinal;
 
 };
