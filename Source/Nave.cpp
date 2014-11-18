@@ -1,19 +1,20 @@
 #include "Nave.h"
 #include "Config.h"
 
-Nave::Nave(SDL_Surface * screen, char * rutaImagen, int x, int y)
+Nave::Nave(SDL_Surface * screen, char * rutaImagen, int x, int y, int module)
 {
+	this->module = module;
 	sprite = new Sprite(screen);
 	sprite->cargarimagen(rutaImagen);
-	w = sprite->WidthModule(0);
-	h = sprite->HeightModule(0);
+	w = sprite->WidthModule(this->module);
+	h = sprite->HeightModule(this->module);
 	this->x = x;
 	this->y = y;
 	automovimiento = false;
 	pasoActual=0;
 	pasoLimite=-1;
-
 }
+
 void Nave::SetAutoMovimiento(bool automovimiento)
 {
 	this->automovimiento = automovimiento;
@@ -31,12 +32,11 @@ void Nave::Actualizar()
 		//pasoActual++;
 		if (pasoActual>=pasoLimite)
 		pasoActual=0;
-	}
-	
+	}	
 	}
 
 void Nave::Pintar(){
-	sprite->PintarModulo(0,x,y);
+	sprite->PintarModulo(this->module,x,y);
 }
 
 void Nave::MoverLados(int posicion){

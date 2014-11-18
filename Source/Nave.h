@@ -12,9 +12,11 @@ class Nave{
 	int pasos;
 	int pasoActual;
 	int pasoLimite;
+	int module;//Modulo actual
+
 public:
 	void MoverArribaAbajo(int posicion);
-	Nave(SDL_Surface * screen, char * rutaImagen, int x, int y);//Constructor
+	Nave(SDL_Surface * screen, char * rutaImagen, int x, int y, int module);//Constructor
 	void SetAutoMovimiento(bool automovimiento);
 	void SetPasoLimite(int pasos);
 	int ObtenerPasoActual();

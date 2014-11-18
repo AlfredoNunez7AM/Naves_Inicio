@@ -12,6 +12,12 @@ Sprite::~Sprite()
 
 void Sprite::cargarimagen(char*nombre){
 	imagen = SDL_LoadBMP(nombre);	
+	if (imagen == NULL)
+	{
+		printf("No se ha podido cargar la imagen: %s\n", SDL_GetError());
+		exit(1);
+	}
+	SDL_SetColorKey(imagen, SDL_SRCCOLORKEY | SDL_RLEACCEL, SDL_MapRGB(imagen->format, 255, 0, 255));
 }
 //void Sprite::PintarModulo(int color, int x, int y, int w, int h){
 //	SDL_Rect src;
