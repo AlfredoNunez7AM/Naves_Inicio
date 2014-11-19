@@ -26,9 +26,11 @@ public:
 private:
 	void Iniciando();
 	void MoverEnemigo();
+	void Menu();
 	bool LimitePantalla(Nave * objeto, int bandera);
 	unsigned int x;
 
+	int opcionSeleccionada;
 	Uint8 *keys;//Esta variable nos servira para ver si determinadas teclas estan o no pulsadas
 	SDL_Event event;//La variable event de tipo evento de SDL nos servira para motorizar
 	SDL_Surface *screen, *image;

@@ -13,7 +13,7 @@ class SpriteDef
 		int h;
 	};
 
-	Modulos modulos [3];//<--- # de modulos
+	Modulos modulos [9];//<--- # de modulos
 	SpriteDef();
 };
 

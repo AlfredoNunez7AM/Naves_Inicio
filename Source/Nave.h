@@ -23,6 +23,7 @@ public:
 	void IncrementarPasoActual();
 	bool EstaColicionando(Nave * b);
 	void Pintar();
+	void Pintar(int modulo, int x, int y);
 	void MoverLados(int posicion);
 	void Actualizar();
 	int ObtenerY();

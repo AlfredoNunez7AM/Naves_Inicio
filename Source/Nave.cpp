@@ -39,6 +39,10 @@ void Nave::Pintar(){
 	sprite->PintarModulo(this->module,x,y);
 }
 
+void Nave::Pintar(int modulo, int x, int y){
+	sprite->PintarModulo(modulo, x, y);
+}
+
 void Nave::MoverLados(int posicion){
 	x += posicion;
 }

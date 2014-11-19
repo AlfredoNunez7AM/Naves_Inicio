@@ -27,9 +27,9 @@ void CGame::Iniciando()
 	atexit(SDL_Quit);
 	//x = (WIDTH_SCREEN/2)-(sprite->WidthModule(0)/2);//Ancho
 	//	y = (HEIGHT_SCREEN-80)-(sprite->HeightModule(0));//Alto
-	nave = new Nave(screen, "../Data/MiNave.bmp", (WIDTH_SCREEN / 2)/*-(sprite->WidthModule(0)/2)*/, (HEIGHT_SCREEN - 80)/*-(sprite->HeightModule(0))*/, 0);
-	menu = new Nave(screen, "../Data/Menu.bmp", 0, 0, 1);
-	textos = new Nave(screen, "../Data/Titulos.bmp", 0,0,1);
+	nave = new Nave(screen, "../Data/MiNave.bmp", (WIDTH_SCREEN / 2)/*-(sprite->WidthModule(0)/2)*/, (HEIGHT_SCREEN - 80)/*-(sprite->HeightModule(0))*/, MODULO_MINAVE_NAVE);
+	menu = new Nave(screen, "../Data/Menu.bmp", 0, 0, MODULO_MENU_FONDO);
+	textos = new Nave(screen, "../Data/Titulos.bmp", 0,0, -1);
 	fondo = new Nave(screen, "../Data/Jugando.bmp", 0, 0, 1);
 for (int i = 0; i < 5; i++)
 {
@@ -39,7 +39,7 @@ for (int i = 0; i < 5; i++)
 }
 
 tick = 0;
-
+opcionSeleccionada = MODULO_TEXTO_MENU_OPCION1;
 //nave = new Sprite(screen);
 //nave->cargarimagen("../Data/MiNave.bmp");
 }
@@ -67,8 +67,14 @@ bool CGame::Start()
 			break;
 		case Estado::ESTADO_MENU:
 			menu->Pintar();
-			textos->Pintar();
-			//	estado = Estado::ESTADO_JUGANDO;
+			textos->Pintar(MODULO_TEXTO_TITULO,3,0);
+			textos->Pintar(MODULO_TEXTO_NOMBRE, 350, 450);
+			textos->Pintar(MODULO_TEXTO_MENU_OPCION1, 180, 180);
+			textos->Pintar(MODULO_TEXTO_MENU_OPCION2, 180, 210);
+			Menu();
+			/*textos->Pintar(MODULO_TEXTO_TITULO, 3, 0);
+			textos->Pintar(MODULO_TEXTO_TITULO, 3, 0);*/
+			//estado = Estado::ESTADO_JUGANDO;
 			break;
 		case Estado::ESTADO_JUGANDO:
 			for (int i = 0; i < 5; i++)
@@ -81,6 +87,7 @@ bool CGame::Start()
 			/*nave->PintarModulo(0,0,0,64,64);
 			nave->PintarModulo(0,100,100);*/
 			keys = SDL_GetKeyState(NULL);
+			
 			if (keys[SDLK_UP])
 			{
 				if (!LimitePantalla(nave, BORDE_SUPERIOR))
@@ -199,3 +206,14 @@ void CGame::MoverEnemigo(){
 	}
 }//Termina MoverEnemigo
 
+
+void CGame::Menu()
+{
+	for (int i = MODULO_TEXTO_MENU_OPCION1, j=0 ; i <= MODULO_TEXTO_MENU_OPCION2; i++, j++)
+	{
+		if (i == opcionSeleccionada)
+			textos->Pintar(i+2, 182, 180+(j*30));
+		else
+			textos->Pintar(i, 180, 180+(j*30));
+	}
+}
