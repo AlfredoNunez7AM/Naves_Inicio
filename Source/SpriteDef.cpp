@@ -57,8 +57,14 @@ SpriteDef::SpriteDef(){
 
 	//Salir2
 	modulos[8].id = MODULO_TEXTO_MENU_OPCION2_SELECCIONADO;
-	modulos[8].x = 306;
+	modulos[8].x = 310;
 	modulos[8].y = 165;
 	modulos[8].w = 85;
-	modulos[8].h = 24;
+	modulos[8].h = 20;
+
+	//modulos[8].id = MODULO_TEXTO_MENU_OPCION2_SELECCIONADO;
+	//modulos[8].x = 306;
+	//modulos[8].y = 165;
+	//modulos[8].w = 85;
+	//modulos[8].h = 24;
 }

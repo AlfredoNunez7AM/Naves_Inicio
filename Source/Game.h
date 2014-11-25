@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL_image.h>
+#include "Objeto.h"
 #include "Nave.h"
 
 
@@ -27,7 +28,7 @@ private:
 	void Iniciando();
 	void MoverEnemigo();
 	void Menu();
-	bool LimitePantalla(Nave * objeto, int bandera);
+	bool LimitePantalla(Objeto * objeto, int bandera);
 	unsigned int x;
 
 	int opcionSeleccionada;
@@ -36,7 +37,7 @@ private:
 	SDL_Surface *screen, *image;
 
 	Nave *nave;
-	Nave *enemigoArreglo[5];
+	Objeto *enemigoArreglo[10];
 
 	Estado estado;
 	Estado condicion;
@@ -45,8 +46,8 @@ private:
 	int tiempoFrameInicial;
 	int tiempoFrameFinal;
 
-	Nave *menu;//Fondo del menu
-	Nave *textos;//Textos del juego
-	Nave *fondo;//Fondo del juego
+	Objeto *menu;//Fondo del menu
+	Objeto *textos;//Textos del juego
+	Objeto *fondo;//Fondo del juego
 
 };

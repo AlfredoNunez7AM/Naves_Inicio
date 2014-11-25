@@ -1,34 +1,19 @@
-#ifndef _NAVE_H_
-#define _NAVE_H_
-#include "Sprite.h"
+#ifndef __NAVE_H__
+#define __NAVE_H__
+#include "Objeto.h"
 
 class Nave{
-	Sprite * sprite;
-	int x;
-	int y;
-	int w;
-	int h;
-	bool automovimiento;
-	int pasos;
-	int pasoActual;
-	int pasoLimite;
-	int module;//Modulo actual
+	Objeto * nave;
+	Objeto * bala;
 
 public:
-	void MoverArribaAbajo(int posicion);
-	Nave(SDL_Surface * screen, char * rutaImagen, int x, int y, int module);//Constructor
-	void SetAutoMovimiento(bool automovimiento);
-	void SetPasoLimite(int pasos);
-	int ObtenerPasoActual();
-	void IncrementarPasoActual();
-	bool EstaColicionando(Nave * b);
+	Nave(SDL_Surface * screen, char * rutaImagen, int x, int y, int module);
 	void Pintar();
-	void Pintar(int modulo, int x, int y);
-	void MoverLados(int posicion);
-	void Actualizar();
-	int ObtenerY();
-	int ObtenerX();
-	int ObtenerW();
-	int ObtenerH();
+	void moverIzquierda();
+	void moverDerecha();
+	void moverArriba();
+	void moverAbajo();
+	Objeto * GetNaveObjeto();
 };
+
 #endif

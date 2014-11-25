@@ -1,8 +1,11 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-#define WIDTH_SCREEN 540
-#define HEIGHT_SCREEN 480
+#define WIDTH_SCREEN 800
+#define HEIGHT_SCREEN 600
+
+//#define WIDTH_SCREEN 540
+//#define HEIGHT_SCREEN 480
 
 #define BORDE_IZQUIERDO 1<<0
 #define BORDE_SUPERIOR  1<<1
