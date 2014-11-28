@@ -62,9 +62,10 @@ SpriteDef::SpriteDef(){
 	modulos[8].w = 85;
 	modulos[8].h = 20;
 
-	//modulos[8].id = MODULO_TEXTO_MENU_OPCION2_SELECCIONADO;
-	//modulos[8].x = 306;
-	//modulos[8].y = 165;
-	//modulos[8].w = 85;
-	//modulos[8].h = 24;
+	//balas
+	modulos[9].id = MODULO_BALAS_BALA;
+	modulos[9].x = 0;
+	modulos[9].y = 0;
+	modulos[9].w = 5;
+	modulos[9].h = 5;
 }

@@ -78,7 +78,7 @@ bool CGame::Start()
 			//estado = Estado::ESTADO_JUGANDO;
 			break;
 		case Estado::ESTADO_JUGANDO:
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 5; i++)
 			{
 				enemigoArreglo[i]->Actualizar();
 			}
@@ -112,9 +112,14 @@ bool CGame::Start()
 			}
 			fondo->Pintar();
 			nave->Pintar();
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 5; i++)
 			{
 				enemigoArreglo[i]->Pintar();
+			}
+
+			if (keys[SDLK_SPACE])
+			{
+				nave->Disparar();
 			}
 
 			if (keys[SDLK_ESCAPE])

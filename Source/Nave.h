@@ -9,6 +9,7 @@ class Nave{
 public:
 	Nave(SDL_Surface * screen, char * rutaImagen, int x, int y, int module);
 	void Pintar();
+	void Disparar();
 	void moverIzquierda();
 	void moverDerecha();
 	void moverArriba();
