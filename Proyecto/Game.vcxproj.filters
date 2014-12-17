@@ -30,10 +30,10 @@
     <ClCompile Include="..\Source\Objeto.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Stage.cpp">
+    <ClCompile Include="..\Source\Nave.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Nave.cpp">
+    <ClCompile Include="..\Source\Stage.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,10 +53,10 @@
     <ClInclude Include="..\Source\Objeto.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Stage.h">
+    <ClInclude Include="..\Source\Nave.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Nave.h">
+    <ClInclude Include="..\Source\Stage.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

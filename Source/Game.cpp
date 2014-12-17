@@ -31,15 +31,17 @@ void CGame::Iniciando()
 	menu = new Objeto(screen, "../Data/Menu.bmp", 0, 0, MODULO_MENU_FONDO);
 	textos = new Objeto(screen, "../Data/Titulos.bmp", 0, 0, -1);
 	fondo = new Objeto(screen, "../Data/Jugando.bmp", 0, 0, 1);
-for (int i = 0; i < 10; i++)
+for (int i = 0; i < 5; i++)
 {
-	enemigoArreglo[i] = new Objeto(screen, "../Data/enemigo.bmp", i * 60, 0, 2);
-	enemigoArreglo[i]->SetAutoMovimiento(false);
-	enemigoArreglo[i]->SetPasoLimite(4);
+	enemigoArreglo[i] = new Nave(screen, "../Data/enemigo.bmp", i * 60, 0, 2);
+	enemigoArreglo[i]->GetNaveObjeto()->SetAutoMovimiento(false);
+	enemigoArreglo[i]->GetNaveObjeto()->SetPasoLimite(4);
 }
 
 tick = 0;
 opcionSeleccionada = MODULO_TEXTO_MENU_OPCION1;
+
+
 //nave = new Sprite(screen);
 //nave->cargarimagen("../Data/MiNave.bmp");
 }
@@ -63,24 +65,31 @@ bool CGame::Start()
 		switch (estado){///ACT2: Mal,, te faltaron 2 estados mas.
 		case Estado::ESTADO_INICIANDO:
 			Iniciando();
+			Inicializandotage();
 			estado = Estado::ESTADO_MENU;
-			//estado = Estado::ESTADO_JUGANDO;
 			break;
 		case Estado::ESTADO_MENU:
 			menu->Pintar();
-			textos->Pintar(MODULO_TEXTO_TITULO,130,0);
-			textos->Pintar(MODULO_TEXTO_NOMBRE, 600, 570);
-			textos->Pintar(MODULO_TEXTO_MENU_OPCION1, 310, 250);
-			textos->Pintar(MODULO_TEXTO_MENU_OPCION2, 310, 280);
+			textos->Pintar(MODULO_TEXTO_TITULO,150,0);
+			textos->Pintar(MODULO_TEXTO_NOMBRE, 620, 570);
+			textos->Pintar(MODULO_TEXTO_MENU_OPCION1, 320, 220);
+			textos->Pintar(MODULO_TEXTO_MENU_OPCION2, 320, 250);
 			Menu();
 			/*textos->Pintar(MODULO_TEXTO_TITULO, 3, 0);
 			textos->Pintar(MODULO_TEXTO_TITULO, 3, 0);*/
 			//estado = Estado::ESTADO_JUGANDO;
 			break;
+		case Estado::ESTADO_PRE_JUGANDO:
+			nivelActual = 0;
+			vida = 1;
+			enemigosEliminados = 0;
+			estado = ESTADO_JUGANDO;
+				break;
+
 		case Estado::ESTADO_JUGANDO:
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < nivel[nivelActual].NumeroEnemigosVisibles; i++)
 			{
-				enemigoArreglo[i]->Actualizar();
+				enemigoArreglo[i]->GetNaveObjeto()->Actualizar();
 			}
 			MoverEnemigo();
 			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0
@@ -92,39 +101,76 @@ bool CGame::Start()
 			if (keys[SDLK_UP])
 			{
 				if (!LimitePantalla(nave->GetNaveObjeto(), BORDE_SUPERIOR))
-					nave->moverArriba();
+					nave->MoverArriba(nivel[nivelActual].VelocidadNavePropia);
 			}
 			if (keys[SDLK_DOWN])
 			{
 				if (!LimitePantalla(nave->GetNaveObjeto(), BORDE_INFERIOR))
-					nave->moverAbajo();
+					nave->MoverAbajo(nivel[nivelActual].VelocidadNavePropia);
 			}
 
 			if (keys[SDLK_LEFT])
 			{
 				if (!LimitePantalla(nave->GetNaveObjeto(), BORDE_IZQUIERDO))
-					nave->moverIzquierda();
+					nave->MoverIzquierda(nivel[nivelActual].VelocidadNavePropia);
 			}
 			if (keys[SDLK_RIGHT])
 			{
 				if (!LimitePantalla(nave->GetNaveObjeto(), BORDE_DERECHO))
-					nave->moverDerecha();
-			}
-			fondo->Pintar();
-			nave->Pintar();
-			for (int i = 0; i < 5; i++)
-			{
-				enemigoArreglo[i]->Pintar();
-			}
-
-			if (keys[SDLK_SPACE])
-			{
-				nave->Disparar();
+					nave->MoverDerecha(nivel[nivelActual].VelocidadNavePropia);
 			}
 
 			if (keys[SDLK_ESCAPE])
 			{
 				estado = Estado::ESTADO_MENU;
+			}
+			if (keys[SDLK_SPACE])
+			{
+				nave->Disparar(NAVE_PROPIA, nivel[nivelActual].balasMaximas);
+			}
+			///////////////////////////////////////
+			if (keys[SDLK_x]){//bala enemigo / nave nuestra
+				nave->simularColision(true);
+			}
+
+			if (keys[SDLK_c]){//nuestra bala / nave enemigo
+				int enemigoAEliminar = rand() % nivel[nivelActual].NumeroEnemigosVisibles;
+				enemigoArreglo[enemigoAEliminar]->simularColision(true);
+			}
+			if (keys[SDLK_v]){//nuestra nave / nave enemigo
+
+			}
+
+			fondo->Pintar();
+			////////////////////////////////////////
+			//////// CONTROL DE COLISIONES /////////
+			for (int i = 0; i < nivel[nivelActual].NumeroEnemigosVisibles; i++)
+			{
+				if (enemigoArreglo[i]->estaColisionandoConBala(nave))
+					vida--;
+				if (nave->estaColisionandoConBala(enemigoArreglo[i])){
+					enemigoArreglo[i]->setVisible(false);
+					enemigosEliminados++;
+					nave->simularColision(false);
+					if (enemigosEliminados<nivel[nivelActual].NumeroEnemigosEliminar)
+					{
+						enemigoArreglo[i]->crearNuevo();
+					}
+				}
+			}
+			/////////////////////////////////////////
+			if (vida <= 0)
+				estado = ESTADO_MENU;
+
+			if (enemigosEliminados >= nivel[nivelActual].NumeroEnemigosEliminar)
+			{
+				nivelActual++;
+			}
+			nave->Pintar(NAVE_PROPIA);
+			for (int i = 0; i < nivel[nivelActual].NumeroEnemigosVisibles; i++)
+			{
+				enemigoArreglo[i]->Pintar(NAVE_ENEMIGO);
+				enemigoArreglo[i]->AutoDisparar(nivel[nivelActual].velocidadBalasEnemigo);
 			}
 
 			break;
@@ -185,85 +231,70 @@ bool CGame::LimitePantalla(Objeto*objeto, int bandera)
 
 void CGame::MoverEnemigo(){
 
-			for (int i = 0; i < 10; i++)
+	for (int i = 0; i < nivel[nivelActual].NumeroEnemigosVisibles; i++)
 			{
-				if(enemigoArreglo[i]->ObtenerPasoActual()==0)
-	if (!LimitePantalla(enemigoArreglo[i], BORDE_DERECHO))
-		enemigoArreglo[i]->MoverLados(10);//Derecha
+				if(enemigoArreglo[i]->GetNaveObjeto()->ObtenerPasoActual()==0)
+	if (!LimitePantalla(enemigoArreglo[i]->GetNaveObjeto(), BORDE_DERECHO))
+		enemigoArreglo[i]->GetNaveObjeto()->MoverLados(nivel[nivelActual].VelocidadNaveEnemigo);//Derecha
 	else{
-		enemigoArreglo[i]->IncrementarPasoActual();
+		enemigoArreglo[i]->GetNaveObjeto()->IncrementarPasoActual();
 	}//fin else derecho
 
-	if (enemigoArreglo[i]->ObtenerPasoActual()==1)
-		if(!LimitePantalla(enemigoArreglo[i], BORDE_INFERIOR))
-			enemigoArreglo[i]->MoverArribaAbajo(10);//Abajo
+	if (enemigoArreglo[i]->GetNaveObjeto()->ObtenerPasoActual() == 1)
+		if (!LimitePantalla(enemigoArreglo[i]->GetNaveObjeto(), BORDE_INFERIOR))
+			enemigoArreglo[i]->GetNaveObjeto()->MoverArribaAbajo(nivel[nivelActual].VelocidadNaveEnemigo);//Abajo
 		else{
-		enemigoArreglo[i]->IncrementarPasoActual();
+			enemigoArreglo[i]->GetNaveObjeto()->IncrementarPasoActual();
 	}//Fn else inferior
 
-	if(enemigoArreglo[i]->ObtenerPasoActual()==2)
-		if (!LimitePantalla(enemigoArreglo[i], BORDE_IZQUIERDO))
-			enemigoArreglo[i]->MoverLados(-10);//Izquierda
+		if (enemigoArreglo[i]->GetNaveObjeto()->ObtenerPasoActual() == 2)
+			if (!LimitePantalla(enemigoArreglo[i]->GetNaveObjeto(), BORDE_IZQUIERDO))
+			enemigoArreglo[i]->GetNaveObjeto()->MoverLados(-nivel[nivelActual].VelocidadNaveEnemigo);//Izquierda
 	else{
-				enemigoArreglo[i]->IncrementarPasoActual();
+		enemigoArreglo[i]->GetNaveObjeto()->IncrementarPasoActual();
 			}//fin else izquierda
 
-		if (enemigoArreglo[i]->ObtenerPasoActual()==3)
-			if (!LimitePantalla(enemigoArreglo[i], BORDE_SUPERIOR))
-				enemigoArreglo[i]->MoverArribaAbajo(-10);//Arriba
+	if (enemigoArreglo[i]->GetNaveObjeto()->ObtenerPasoActual() == 3)
+		if (!LimitePantalla(enemigoArreglo[i]->GetNaveObjeto(), BORDE_SUPERIOR))
+				enemigoArreglo[i]->GetNaveObjeto()->MoverArribaAbajo(-nivel[nivelActual].VelocidadNaveEnemigo);//Arriba
 			else{
-				enemigoArreglo[i]->IncrementarPasoActual();
+				enemigoArreglo[i]->GetNaveObjeto()->IncrementarPasoActual();
 				}//fin else arriba
 	}
 }//Termina MoverEnemigo
 
 
-void CGame::Menu()
+void CGame::Menu() 
 {
-	for (int i = MODULO_TEXTO_MENU_OPCION1, j=0 ; i <= MODULO_TEXTO_MENU_OPCION2;i++, j++)
+	for (int i = MODULO_TEXTO_MENU_OPCION1, j = 0; i <= MODULO_TEXTO_MENU_OPCION2; i++, j++) 
 	{
-			keys = SDL_GetKeyState(NULL);
-			if (keys[SDLK_UP])
+		keys = SDL_GetKeyState(NULL);
+		if (keys[SDLK_UP]) 
+		{ 
+			opcionSeleccionada = MODULO_TEXTO_MENU_OPCION1;
+		}
+
+		if (keys[SDLK_DOWN]) 
+		{ 
+			opcionSeleccionada = MODULO_TEXTO_MENU_OPCION2;
+		}
+
+		if (i == opcionSeleccionada) 
+			textos->Pintar(i + 2, 320, 220 + (j * 30)); 
+		else 
+			textos->Pintar(i, 320, 220 + (j * 30));
+
+		if (keys[SDLK_RETURN]) 
+		{
+			if (opcionSeleccionada == MODULO_TEXTO_MENU_OPCION1) 
+			{ 
+				estado = Estado::ESTADO_PRE_JUGANDO; 
+		    }
+
+			if (opcionSeleccionada == MODULO_TEXTO_MENU_OPCION2) 
 			{
-				opcionSeleccionada = MODULO_TEXTO_MENU_OPCION1;
-			/*	if (i == opcionSeleccionada)
-					textos->Pintar(i + 2, 312, 250 + (j * 30));
-				else
-					textos->Pintar(i, 310, 250 + (j * 30));*/
+				estado = Estado::ESTADO_FINALIZANDO; 
 			}
-
-			if (keys[SDLK_DOWN])
-			{
-				opcionSeleccionada = MODULO_TEXTO_MENU_OPCION2;
-				/*if (i == opcionSeleccionada)
-					textos->Pintar(i + 2, 308, 250 + (j * 30));
-				else
-					textos->Pintar(i, 310, 250 + (j * 30));*/
-				
-			}
-
-			/*if (i == opcionSeleccionada)
-				textos->Pintar(i + 2, 308, 250 + (j * 30));
-			else
-				textos->Pintar(i, 310, 250 + (j * 30));*/
-
-			if (i == opcionSeleccionada)
-				textos->Pintar(i + 2, 312, 250 + (j * 30));
-			else
-				textos->Pintar(i, 310, 250 + (j * 30));
-
-
-			if (keys[SDLK_RETURN])
-			{
-				if (opcionSeleccionada == MODULO_TEXTO_MENU_OPCION1)
-				{
-					estado = Estado::ESTADO_JUGANDO;
-				}
-
-				if (opcionSeleccionada == MODULO_TEXTO_MENU_OPCION2)
-				{
-					estado = Estado::ESTADO_FINALIZANDO;
-				}
-			}// sdlk_return
-	}//for
-}//void
+		}// sdlk_return 
+	}//for 
+}//void	

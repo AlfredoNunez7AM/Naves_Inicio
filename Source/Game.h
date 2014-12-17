@@ -2,6 +2,7 @@
 #include <SDL_image.h>
 #include "Objeto.h"
 #include "Nave.h"
+#include "Stage.h"
 
 
 
@@ -17,6 +18,7 @@ public:
 	enum Estado{
 		ESTADO_INICIANDO,
 		ESTADO_MENU,
+		ESTADO_PRE_JUGANDO,
 		ESTADO_JUGANDO,
 		ESTADO_TERMINANDO,
 		ESTADO_FINALIZANDO,
@@ -37,7 +39,10 @@ private:
 	SDL_Surface *screen, *image;
 
 	Nave *nave;
-	Objeto *enemigoArreglo[10];
+	Nave *enemigoArreglo[5];
+	Stage nivel[4];
+	void Inicializandotage();
+	int nivelActual;
 
 	Estado estado;
 	Estado condicion;
@@ -49,5 +54,8 @@ private:
 	Objeto *menu;//Fondo del menu
 	Objeto *textos;//Textos del juego
 	Objeto *fondo;//Fondo del juego
+
+	int vida;
+	int enemigosEliminados;
 
 };
